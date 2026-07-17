@@ -15,11 +15,30 @@ sitemap.xml, robots.txt, .nojekyll
 BRIEF.md, BRAND.md, RICERCHE/, FOTO/, GRAFICHE/, RIFERIMENTI/ → materiale di progetto
 ```
 
+## 📩 Modulo richieste → Google Sheet (Apps Script)
+
+Il modulo in `#contatti` salva ogni richiesta in un Google Sheet e poi manda l'utente su `grazie.html`.
+
+**Foglio:** https://docs.google.com/spreadsheets/d/1fIQrf27cQi525pIdnzeSwmVDRU4cpyS9XLE9hCZFThs/edit
+
+**Attivazione (una volta sola):**
+1. Apri il foglio → **Estensioni → Apps Script**.
+2. Cancella il codice di esempio e incolla il contenuto di **`apps-script/Codice.gs`**.
+   - (Facoltativo) in `NOTIFICA_EMAIL` metti la tua email per ricevere un avviso a ogni richiesta.
+3. Salva → **Distribuisci → Nuova distribuzione → App web**
+   - Esegui come: **Me** · Chi ha accesso: **Chiunque** → Distribuisci → autorizza.
+4. Copia l'URL che finisce con **`/exec`**.
+5. Incollalo in **`assets/js/main.js`** alla riga `var SCRIPT_URL = '...'` (sostituisci `INCOLLA_QUI_URL_APPS_SCRIPT`).
+6. Commit + push.
+
+> Finché `SCRIPT_URL` non è configurato, il modulo porta comunque a `grazie.html` ma **non salva nulla**. Le colonne del foglio vengono create in automatico al primo invio.
+
 ## ⚠️ Da sostituire PRIMA del lancio
 
 | Cosa | Dove | Valore attuale (placeholder) |
 |---|---|---|
-| **Numero WhatsApp/telefono** | `index.html` (cerca `390000000000` e `+39 000 000 0000`) e `assets/js/main.js` riga `WHATSAPP_NUMBER` | `+39 000 000 0000` |
+| **URL Apps Script** | `assets/js/main.js` riga `SCRIPT_URL` | `INCOLLA_QUI_URL_APPS_SCRIPT` |
+| **Numero WhatsApp/telefono** | `index.html` + `grazie.html` (cerca `390000000000` e `+39 000 000 0000`) | `+39 000 000 0000` |
 | **Email** | `index.html` (cerca `info@ortosociale.it`) | `info@ortosociale.it` |
 | **Testimonianze** | sezione `#testimonianze` — sono **esempi**, vanno sostituite con citazioni reali dei primi partecipanti | Franco, Elisa, Marta e Luca |
 | **Prezzi** | sezione `#orti` — prezzi indicativi di lancio (290/420/590 €/anno), confermarli | |
@@ -48,4 +67,4 @@ BRIEF.md, BRAND.md, RICERCHE/, FOTO/, GRAFICHE/, RIFERIMENTI/ → materiale di p
 - Logo: sfondo bianco rimosso via script Python (PIL), versione chiara per il footer, favicon dal germoglio.
 - SEO: title/description, Open Graph + Twitter Card, JSON-LD `LocalBusiness` + `FAQPage`, sitemap, robots, alt text su tutte le immagini.
 - Accessibilità: skip-link, focus visibile, `aria-label`/`aria-expanded`, contrasto AA (terracotta scurita nei bottoni), `prefers-reduced-motion` rispettato.
-- Il form contatti non ha backend: apre WhatsApp con il messaggio precompilato (scelta adatta al traffico da social).
+- Il form contatti salva i lead su Google Sheet via Apps Script (`fetch` no-cors, form-encoded per evitare il preflight CORS), poi reindirizza a `grazie.html`. Campo honeypot `website` anti-spam.

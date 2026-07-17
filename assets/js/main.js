@@ -40,18 +40,50 @@
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  /* --- Form contatti -> messaggio WhatsApp precompilato --- */
-  var WHATSAPP_NUMBER = '390000000000'; // SOSTITUIRE con il numero reale (senza + e senza spazi)
+  /* --- Form richiesta -> Google Sheet (Apps Script) + pagina di ringraziamento --- */
+
+  // 1) Incolla qui l'URL "/exec" del tuo Web App di Apps Script (vedi README).
+  var SCRIPT_URL = 'INCOLLA_QUI_URL_APPS_SCRIPT';
+
   var form = document.getElementById('contact-form');
   if (form) {
+    var btn = document.getElementById('submit-btn');
+    var note = document.getElementById('form-note');
+    var btnLabel = btn ? btn.textContent : '';
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var name = (form.name.value || '').trim();
-      var interest = form.interest.value;
-      var message = (form.message.value || '').trim();
-      var text = 'Ciao! Sono ' + name + '. Mi interessa: ' + interest + '.';
-      if (message) text += '\n' + message;
-      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+
+      // Honeypot: se compilato è un bot -> fingi successo senza inviare.
+      if (form.website && form.website.value) { window.location.href = 'grazie.html'; return; }
+
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Invio in corso…'; }
+
+      var data = new URLSearchParams({
+        name: (form.name.value || '').trim(),
+        phone: (form.phone.value || '').trim(),
+        email: (form.email.value || '').trim(),
+        interest: form.interest.value,
+        message: (form.message.value || '').trim(),
+        page: window.location.href
+      });
+
+      // Se l'URL non è ancora configurato, non bloccare l'utente: vai al grazie.
+      if (SCRIPT_URL.indexOf('http') !== 0) { window.location.href = 'grazie.html'; return; }
+
+      // no-cors + form-encoded: evita il preflight CORS con Apps Script.
+      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data })
+        .then(function () { window.location.href = 'grazie.html'; })
+        .catch(function () {
+          // Fallback: la richiesta parte comunque; in caso di errore rete avvisa.
+          if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
+          if (note) {
+            note.textContent = 'Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.';
+            note.style.color = '#A65C1B';
+          }
+        });
     });
   }
 

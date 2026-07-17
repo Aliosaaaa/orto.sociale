@@ -405,7 +405,13 @@ ul { padding: 0; }
   border-radius: var(--radius-lg); padding: 1.8rem; box-shadow: var(--shadow);
   display: grid; gap: 1.1rem;
 }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
 .form-row { display: grid; gap: .35rem; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+#submit-btn[disabled] { opacity: .7; cursor: progress; }
+@media (max-width: 520px) {
+  .form-grid { grid-template-columns: 1fr; gap: 1.1rem; }
+}
 .form-row label { font-weight: 600; font-size: .92rem; color: var(--verde-scuro); }
 .form-row .optional { font-weight: 400; color: var(--ink-soft); }
 .form-row input, .form-row select, .form-row textarea {
@@ -445,6 +451,31 @@ ul { padding: 0; }
   padding-block: 1.3rem; font-size: .85rem; color: rgba(248, 246, 241, .55);
 }
 .footer-bottom p { margin: 0; }
+
+/* ---------- Pagina di ringraziamento ---------- */
+.thanks {
+  min-height: calc(100vh - var(--header-h));
+  display: flex; align-items: center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, var(--salvia-soft) 0%, var(--crema) 60%);
+  padding-block: clamp(3rem, 8vw, 5rem);
+}
+.thanks-inner { max-width: 640px; margin-inline: auto; text-align: center; }
+.thanks-icon {
+  display: inline-grid; place-items: center;
+  width: 84px; height: 84px; border-radius: 50%;
+  background: var(--bianco); color: var(--verde);
+  border: 2px solid var(--salvia);
+  box-shadow: var(--shadow); margin-bottom: 1.4rem;
+  animation: pop-in .5s cubic-bezier(.17, .89, .32, 1.28) both;
+}
+@keyframes pop-in { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .thanks-icon { animation: none; } }
+.thanks h1 { color: var(--verde-scuro); font-size: clamp(2.1rem, 5vw, 3.2rem); }
+.thanks-sub { font-size: 1.15rem; color: var(--ink-soft); max-width: 34rem; margin: 0 auto 2rem; }
+.thanks-actions { display: flex; flex-wrap: wrap; gap: .9rem; justify-content: center; margin-bottom: 2rem; }
+.thanks-note { font-size: .95rem; color: var(--ink-soft); }
+.footer-bottom-solo { border-top: 0; }
 
 /* ---------- Barra CTA mobile ---------- */
 .mobile-cta {

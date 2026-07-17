@@ -453,10 +453,20 @@
             <span>Pescia (PT) · Valdinievole, Toscana</span>
           </li>
         </ul>
-        <form class="contact-form" id="contact-form" aria-label="Modulo di contatto">
+        <form class="contact-form" id="contact-form" aria-label="Modulo di richiesta">
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="f-name">Nome</label>
+              <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Il tuo nome">
+            </div>
+            <div class="form-row">
+              <label for="f-phone">Telefono / WhatsApp</label>
+              <input type="tel" id="f-phone" name="phone" required autocomplete="tel" inputmode="tel" placeholder="Es. 333 123 4567">
+            </div>
+          </div>
           <div class="form-row">
-            <label for="f-name">Nome</label>
-            <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Il tuo nome">
+            <label for="f-email">Email <span class="optional">(facoltativa)</span></label>
+            <input type="email" id="f-email" name="email" autocomplete="email" placeholder="latua@email.it">
           </div>
           <div class="form-row">
             <label for="f-interest">Mi interessa</label>
@@ -472,8 +482,13 @@
             <label for="f-msg">Messaggio <span class="optional">(facoltativo)</span></label>
             <textarea id="f-msg" name="message" rows="3" placeholder="Scrivici qui la tua domanda…"></textarea>
           </div>
-          <button type="submit" class="btn btn-terra">Invia su WhatsApp</button>
-          <p class="form-note">Il messaggio si apre in WhatsApp già scritto: ti basta premere invio.</p>
+          <!-- honeypot anti-spam: nascosto agli umani, riempito dai bot -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="f-website">Non compilare questo campo</label>
+            <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-terra" id="submit-btn">Invia richiesta</button>
+          <p class="form-note" id="form-note">Ti ricontattiamo noi, di persona: niente call center, niente spam.</p>
         </form>
       </div>
       <div class="split-media map-wrap">
