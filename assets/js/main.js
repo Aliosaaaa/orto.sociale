@@ -70,20 +70,22 @@
         page: window.location.href
       });
 
-      // Se l'URL non è ancora configurato, non bloccare l'utente: vai al grazie.
-      if (SCRIPT_URL.indexOf('http') !== 0) { window.location.href = 'grazie.html'; return; }
+      var vaiAlGrazie = function () { window.location.href = 'grazie.html'; };
 
-      // no-cors + form-encoded: evita il preflight CORS con Apps Script.
-      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data })
-        .then(function () { window.location.href = 'grazie.html'; })
-        .catch(function () {
-          // Fallback: la richiesta parte comunque; in caso di errore rete avvisa.
-          if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
-          if (note) {
-            note.textContent = 'Ops, qualcosa è andato storto. Riprova o scrivici su WhatsApp.';
-            note.style.color = '#A65C1B';
-          }
-        });
+      // Se l'URL non è ancora configurato, non bloccare l'utente: vai al grazie.
+      if (SCRIPT_URL.indexOf('http') !== 0) { vaiAlGrazie(); return; }
+
+      // sendBeacon: invia i dati in modo affidabile ANCHE mentre la pagina naviga
+      // (la fetch verrebbe annullata dal redirect). Body form-encoded = niente CORS preflight.
+      var inviato = false;
+      try { inviato = navigator.sendBeacon && navigator.sendBeacon(SCRIPT_URL, data); } catch (err) { inviato = false; }
+
+      if (inviato) { vaiAlGrazie(); return; }
+
+      // Fallback per browser senza sendBeacon: fetch keepalive (sopravvive alla navigazione).
+      fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data, keepalive: true })
+        .then(vaiAlGrazie)
+        .catch(vaiAlGrazie);
     });
   }
 
