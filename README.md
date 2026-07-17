@@ -15,29 +15,23 @@ sitemap.xml, robots.txt, .nojekyll
 BRIEF.md, BRAND.md, RICERCHE/, FOTO/, GRAFICHE/, RIFERIMENTI/ → materiale di progetto
 ```
 
-## 📩 Modulo richieste → Google Sheet (Apps Script)
+## 📩 Modulo richieste → Google Sheet (Apps Script) — ✅ ATTIVO
 
-Il modulo in `#contatti` salva ogni richiesta in un Google Sheet e poi manda l'utente su `grazie.html`.
+Il modulo in `#contatti` salva ogni richiesta nel Google Sheet e manda l'utente su `grazie.html`. **Già configurato e testato end-to-end.**
 
-**Foglio:** https://docs.google.com/spreadsheets/d/1fIQrf27cQi525pIdnzeSwmVDRU4cpyS9XLE9hCZFThs/edit
+- **Foglio:** https://docs.google.com/spreadsheets/d/1fIQrf27cQi525pIdnzeSwmVDRU4cpyS9XLE9hCZFThs/edit
+- **Web App** (Apps Script, deployment "Modulo Orto Sociale", esegui come proprietario, accesso: Chiunque). Il codice è in `apps-script/Codice.gs`; l'URL `/exec` è già in `assets/js/main.js` (`SCRIPT_URL`).
+- Colonne: Data e ora · Nome · Telefono · Email · Interesse · Messaggio · Pagina (create in automatico).
+- L'invio usa `navigator.sendBeacon` (affidabile durante il redirect alla pagina di grazie).
 
-**Attivazione (una volta sola):**
-1. Apri il foglio → **Estensioni → Apps Script**.
-2. Cancella il codice di esempio e incolla il contenuto di **`apps-script/Codice.gs`**.
-   - (Facoltativo) in `NOTIFICA_EMAIL` metti la tua email per ricevere un avviso a ogni richiesta.
-3. Salva → **Distribuisci → Nuova distribuzione → App web**
-   - Esegui come: **Me** · Chi ha accesso: **Chiunque** → Distribuisci → autorizza.
-4. Copia l'URL che finisce con **`/exec`**.
-5. Incollalo in **`assets/js/main.js`** alla riga `var SCRIPT_URL = '...'` (sostituisci `INCOLLA_QUI_URL_APPS_SCRIPT`).
-6. Commit + push.
+**Se modifichi `apps-script/Codice.gs`:** incolla il nuovo codice nell'editor (Estensioni → Apps Script), poi **Distribuisci → Gestisci distribuzioni → (matita) → Versione: Nuova versione → Distribuisci**. L'URL `/exec` resta lo stesso, non serve toccare `main.js`.
 
-> Finché `SCRIPT_URL` non è configurato, il modulo porta comunque a `grazie.html` ma **non salva nulla**. Le colonne del foglio vengono create in automatico al primo invio.
+**Notifica email:** in `apps-script/Codice.gs`, valorizza `NOTIFICA_EMAIL` con un indirizzo per ricevere un avviso a ogni nuova richiesta (poi ridistribuisci come sopra).
 
 ## ⚠️ Da sostituire PRIMA del lancio
 
 | Cosa | Dove | Valore attuale (placeholder) |
 |---|---|---|
-| **URL Apps Script** | `assets/js/main.js` riga `SCRIPT_URL` | `INCOLLA_QUI_URL_APPS_SCRIPT` |
 | **Numero WhatsApp/telefono** | `index.html` + `grazie.html` (cerca `390000000000` e `+39 000 000 0000`) | `+39 000 000 0000` |
 | **Email** | `index.html` (cerca `info@ortosociale.it`) | `info@ortosociale.it` |
 | **Testimonianze** | sezione `#testimonianze` — sono **esempi**, vanno sostituite con citazioni reali dei primi partecipanti | Franco, Elisa, Marta e Luca |
