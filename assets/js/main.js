@@ -75,12 +75,16 @@
       // Se l'URL non è ancora configurato, non bloccare l'utente: vai al grazie.
       if (SCRIPT_URL.indexOf('http') !== 0) { vaiAlGrazie(); return; }
 
-      // sendBeacon: invia i dati in modo affidabile ANCHE mentre la pagina naviga
-      // (la fetch verrebbe annullata dal redirect). Body form-encoded = niente CORS preflight.
+      // sendBeacon accoda l'invio a livello di browser. Body form-encoded = niente CORS preflight.
       var inviato = false;
       try { inviato = navigator.sendBeacon && navigator.sendBeacon(SCRIPT_URL, data); } catch (err) { inviato = false; }
 
-      if (inviato) { vaiAlGrazie(); return; }
+      if (inviato) {
+        // Piccolo ritardo: lascia che il beacon venga effettivamente spedito
+        // prima di cambiare pagina (una navigazione troppo rapida lo annullerebbe).
+        setTimeout(vaiAlGrazie, 300);
+        return;
+      }
 
       // Fallback per browser senza sendBeacon: fetch keepalive (sopravvive alla navigazione).
       fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data, keepalive: true })
