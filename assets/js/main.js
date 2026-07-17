@@ -42,8 +42,8 @@
 
   /* --- Form richiesta -> Google Sheet (Apps Script) + pagina di ringraziamento --- */
 
-  // 1) Incolla qui l'URL "/exec" del tuo Web App di Apps Script (vedi README).
-  var SCRIPT_URL = 'INCOLLA_QUI_URL_APPS_SCRIPT';
+  // 1) URL "/exec" del Web App di Apps Script che salva i lead sul Google Sheet.
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw79qa6g8AH0dg11sejeUSKuTYr5KcwrTEEQ-WfgjsK0swbLC5c2TeRGEEFBEW3cSkuNQ/exec';
 
   var form = document.getElementById('contact-form');
   if (form) {
